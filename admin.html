@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ Панель</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+    <h1>Панель Управления</h1>
+    <p>Доступ только для администраторов</p>
+</header>
+
+<nav>
+    <a href="index.html">Вернуться на сайт</a>
+</nav>
+
+<div class="container">
+
+    <!-- Login Section -->
+    <div id="login-section" class="admin-login">
+        <div class="card">
+            <h2>Авторизация</h2>
+            <p style="margin-bottom: 20px; font-size: 0.9em;">Введите код доступа для управления контентом.</p>
+            <input type="password" id="password-input" placeholder="Код доступа">
+            <button onclick="checkLogin()">Войти в систему</button>
+            <p id="login-error" style="color: #c62828; display: none; margin-top: 10px;">Неверный код доступа</p>
+        </div>
+    </div>
+
+    <!-- Admin Content (Hidden by default) -->
+    <div id="admin-content" style="display: none;">
+
+        <!-- Main Page Management -->
+        <div class="admin-section">
+            <h2 style="color: var(--green-deep);">Редактирование Главной Страницы</h2>
+
+            <label>Название сайта (в шапке):</label>
+            <input type="text" id="main-title" placeholder="Шахісті">
+
+            <label>Подзаголовок (в шапке):</label>
+            <input type="text" id="main-subtitle" placeholder="Клуб интеллектуальной элиты">
+
+            <label>Блок "Добро пожаловать" (HTML):</label>
+            <textarea id="main-welcome" rows="5"></textarea>
+
+            <label>Блок "Философия" (HTML):</label>
+            <textarea id="main-philosophy" rows="5"></textarea>
+
+            <button onclick="saveMainPage()">Сохранить Главную</button>
+        </div>
+
+        <!-- News Management -->
+        <div class="admin-section">
+            <h2 style="color: var(--green-deep);">Управление Новостями</h2>
+            <input type="text" id="news-title" placeholder="Заголовок новости">
+            <input type="date" id="news-date">
+            <textarea id="news-content" rows="4" placeholder="Текст новости"></textarea>
+            <input type="text" id="news-image" placeholder="URL картинки (необязательно)">
+            <button onclick="addNews()">Опубликовать новость</button>
+
+            <h3 style="margin-top: 30px; color: var(--text-dark);">Список новостей</h3>
+            <div id="news-list" class="item-list"></div>
+        </div>
+
+        <!-- Tournament Management -->
+        <div class="admin-section">
+            <h2 style="color: var(--green-deep);">Управление Турнирами</h2>
+            <input type="text" id="tourn-title" placeholder="Название турнира">
+            <input type="text" id="tourn-date" placeholder="Дата проведения (например, 25.12.2026)">
+            <textarea id="tourn-desc" rows="3" placeholder="Описание, формат, взносы"></textarea>
+            <button onclick="addTournament()">Создать турнир</button>
+
+            <h3 style="margin-top: 30px; color: var(--text-dark);">Список турниров</h3>
+            <div id="tourn-list" class="item-list"></div>
+        </div>
+
+        <!-- Rules Management -->
+        <div class="admin-section">
+            <h2 style="color: var(--green-deep);">Редактирование Правил</h2>
+            <p style="font-size: 0.9em; color: #777;">Используйте HTML теги для форматирования (например &lt;p&gt;, &lt;h3&gt;)</p>
+            <textarea id="rules-editor" rows="10"></textarea>
+            <button onclick="saveRules()">Сохранить правила</button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const SECRET_CODE = "1502";
+
+    function checkLogin() {
+        const input = document.getElementById('password-input').value;
+        if (input === SECRET_CODE) {
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('admin-content').style.display = 'block';
+            loadData();
+        } else {
+            document.getElementById('login-error').style.display = 'block';
+        }
+    }
+
+    function loadData() {
+        renderNewsList();
+        renderTournList();
+
+        // Load Rules
+        const currentRules = localStorage.getItem('chess_rules');
+        if (currentRules) {
+            document.getElementById('rules-editor').value = currentRules;
+        } else {
+            document.getElementById('rules-editor').value = `<h2>Общие положения</h2>
+<p>1. Уважение к сопернику обязательно.</p>
+<p>2. Соблюдение тишины.</p>`;
+        }
+
+        // Load Main Page Data
+        const mainContent = JSON.parse(localStorage.getItem('chess_main_page') || '{}');
+        document.getElementById('main-title').value = mainContent.siteTitle || 'Шахісті';
+        document.getElementById('main-subtitle').value = mainContent.siteSubtitle || 'Клуб интеллектуальной элиты';
+
+        // Default values for textareas if empty
+        const defaultWelcome = `<h2>Добро пожаловать</h2>
+<p>Мы создали пространство, где время останавливается, а каждый ход имеет значение.</p>`;
+        const defaultPhilosophy = `<h2>Философия Клуба</h2>
+<p>Шахматы — это искусство анализа.</p>`;
+
+        document.getElementById('main-welcome').value = mainContent.welcomeHtml || defaultWelcome;
+        document.getElementById('main-philosophy').value = mainContent.philosophyHtml || defaultPhilosophy;
+    }
+
+    // --- Main Page Functions ---
+    function saveMainPage() {
+        const data = {
+            siteTitle: document.getElementById('main-title').value,
+            siteSubtitle: document.getElementById('main-subtitle').value,
+            welcomeHtml: document.getElementById('main-welcome').value,
+            philosophyHtml: document.getElementById('main-philosophy').value
+        };
+        localStorage.setItem('chess_main_page', JSON.stringify(data));
+        alert("Главная страница обновлена!");
+    }
+
+    // --- News Functions ---
+    function addNews() {
+        const title = document.getElementById('news-title').value;
+        const date = document.getElementById('news-date').value;
+        const content = document.getElementById('news-content').value;
+        const image = document.getElementById('news-image').value;
+
+        if (!title || !content) {
+            alert("Заполните заголовок и текст!");
+            return;
+        }
+
+        const newsItem = {
+            id: Date.now(),
+            title,
+            date: date || new Date().toLocaleDateString(),
+            content,
+            image
+        };
+
+        let news = JSON.parse(localStorage.getItem('chess_news') || '[]');
+        news.push(newsItem);
+        localStorage.setItem('chess_news', JSON.stringify(news));
+
+        alert("Новость добавлена!");
+        document.getElementById('news-title').value = '';
+        document.getElementById('news-content').value = '';
+        document.getElementById('news-image').value = '';
+
+        renderNewsList();
+    }
+
+    function renderNewsList() {
+        const list = document.getElementById('news-list');
+        list.innerHTML = '';
+        let news = JSON.parse(localStorage.getItem('chess_news') || '[]');
+
+        // Sort by id descending (newest first)
+        news.sort((a, b) => b.id - a.id);
+
+        news.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'item-entry';
+            div.innerHTML = `
+                <div>
+                    <strong style="color: var(--text-dark); font-size: 1.1em;">${item.title}</strong>
+                    <br>
+                    <span style="font-size:0.85em; color: #777;">${item.date}</span>
+                </div>
+                <button class="delete-btn" onclick="deleteNews(${item.id})">Удалить</button>
+            `;
+            list.appendChild(div);
+        });
+    }
+
+    function deleteNews(id) {
+        if(!confirm("Удалить эту новость?")) return;
+        let news = JSON.parse(localStorage.getItem('chess_news') || '[]');
+        news = news.filter(n => n.id !== id);
+        localStorage.setItem('chess_news', JSON.stringify(news));
+        renderNewsList();
+    }
+
+    // --- Tournament Functions ---
+    function addTournament() {
+        const title = document.getElementById('tourn-title').value;
+        const date = document.getElementById('tourn-date').value;
+        const desc = document.getElementById('tourn-desc').value;
+
+        if (!title) {
+            alert("Введите название турнира!");
+            return;
+        }
+
+        const tournItem = {
+            id: Date.now(),
+            title,
+            date,
+            description: desc
+        };
+
+        let tourns = JSON.parse(localStorage.getItem('chess_tournaments') || '[]');
+        tourns.push(tournItem);
+        localStorage.setItem('chess_tournaments', JSON.stringify(tourns));
+
+        alert("Турнир создан!");
+        document.getElementById('tourn-title').value = '';
+        document.getElementById('tourn-desc').value = '';
+        document.getElementById('tourn-date').value = '';
+
+        renderTournList();
+    }
+
+    function renderTournList() {
+        const list = document.getElementById('tourn-list');
+        list.innerHTML = '';
+        let tourns = JSON.parse(localStorage.getItem('chess_tournaments') || '[]');
+
+        tourns.sort((a, b) => b.id - a.id);
+
+        tourns.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'item-entry';
+            div.innerHTML = `
+                <div>
+                    <strong style="color: var(--text-dark); font-size: 1.1em;">${item.title}</strong>
+                    <br>
+                    <span style="font-size:0.85em; color: #777;">${item.date}</span>
+                </div>
+                <button class="delete-btn" onclick="deleteTourn(${item.id})">Удалить</button>
+            `;
+            list.appendChild(div);
+        });
+    }
+
+    function deleteTourn(id) {
+        if(!confirm("Удалить этот турнир?")) return;
+        let tourns = JSON.parse(localStorage.getItem('chess_tournaments') || '[]');
+        tourns = tourns.filter(t => t.id !== id);
+        localStorage.setItem('chess_tournaments', JSON.stringify(tourns));
+        renderTournList();
+    }
+
+    // --- Rules Functions ---
+    function saveRules() {
+        const content = document.getElementById('rules-editor').value;
+        localStorage.setItem('chess_rules', content);
+        alert("Правила обновлены!");
+    }
+
+</script>
+
+</body>
+</html>

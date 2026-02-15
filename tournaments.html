@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Шахісті - Турниры</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+    <h1>Турниры</h1>
+    <p>Соревнования и рейтинги</p>
+</header>
+
+<nav>
+    <a href="index.html">Главная</a>
+    <a href="news.html">Новости</a>
+    <a href="tournaments.html">Турниры</a>
+    <a href="rules.html">Правила</a>
+</nav>
+
+<div class="container" id="tournaments-container">
+    <!-- Tournaments will be loaded here -->
+</div>
+
+<footer>
+    <p>&copy; 2026 Шахматный клуб "Шахісті".</p>
+</footer>
+
+<!-- Secret Admin Button -->
+<a href="admin.html" class="admin-trigger" title="Admin Panel"></a>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById('tournaments-container');
+        const storedTournaments = JSON.parse(localStorage.getItem('chess_tournaments') || '[]');
+
+        if (storedTournaments.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color:#777;">Турниров пока нет.</p>';
+            return;
+        }
+
+        storedTournaments.reverse().forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            card.innerHTML = `
+                <span class="date">${item.date}</span>
+                <h2>${item.title}</h2>
+                <p>${item.description}</p>
+            `;
+            container.appendChild(card);
+        });
+    });
+</script>
+
+</body>
+</html>

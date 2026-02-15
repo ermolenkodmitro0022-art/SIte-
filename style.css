@@ -1,0 +1,252 @@
+:root {
+    --green-deep: #0a2e18;
+    --green-accent: #2e7d32;
+    --white-bg: #f8f9fa;
+    --text-dark: #1a1a1a;
+    --text-light: #f0f0f0;
+    --shadow-card: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    /* Diagonal split background: Top-Left Green, Bottom-Right White */
+    background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-deep) 50%, var(--white-bg) 50%, var(--white-bg) 100%);
+    background-attachment: fixed; /* Keeps the split in place while scrolling */
+    color: var(--text-dark);
+}
+
+/* Add a subtle texture to the green side using a pseudo-element */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        linear-gradient(45deg, #0f3d20 25%, transparent 25%, transparent 75%, #0f3d20 75%, #0f3d20),
+        linear-gradient(45deg, #0f3d20 25%, transparent 25%, transparent 75%, #0f3d20 75%, #0f3d20);
+    background-size: 60px 60px;
+    background-position: 0 0, 30px 30px;
+    opacity: 0.05;
+    z-index: -1;
+    pointer-events: none;
+}
+
+header {
+    text-align: center;
+    padding: 50px 20px;
+    color: var(--text-light); /* Text on the green side is white */
+}
+
+header h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    margin: 0;
+    text-transform: uppercase;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+header p {
+    font-weight: 300;
+    opacity: 0.8;
+    letter-spacing: 1px;
+}
+
+/* Floating Navigation Pill */
+nav {
+    display: flex;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 15px 30px;
+    margin: 0 auto 40px auto;
+    width: fit-content;
+    border-radius: 50px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    position: sticky;
+    top: 20px;
+    z-index: 1000;
+}
+
+nav a {
+    color: var(--green-deep);
+    text-decoration: none;
+    margin: 0 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    transition: color 0.3s, transform 0.2s;
+}
+
+nav a:hover {
+    color: var(--green-accent);
+    transform: translateY(-2px);
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Polished Cards */
+.card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 40px;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-left: 5px solid var(--green-accent); /* Accent border */
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+}
+
+.card h2 {
+    margin-top: 0;
+    color: var(--green-deep);
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.card p {
+    color: #555;
+    line-height: 1.8;
+    font-size: 1.05rem;
+}
+
+.card img {
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.date {
+    display: inline-block;
+    background: var(--green-deep);
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 40px;
+    color: var(--green-deep); /* Text on white side is dark */
+    font-weight: 500;
+    margin-top: 80px;
+}
+
+/* Inputs & Buttons */
+input, textarea, button {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: 2px solid #eee;
+    font-family: inherit;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--green-accent);
+}
+
+button {
+    background: var(--green-deep);
+    color: white;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: var(--green-accent);
+}
+
+.delete-btn {
+    background: #ffebee;
+    color: #c62828;
+    border: none;
+    width: auto;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+}
+.delete-btn:hover {
+    background: #ffcdd2;
+}
+
+/* Admin Panel Specifics */
+.admin-login {
+    max-width: 400px;
+    margin: 100px auto;
+}
+
+.admin-section {
+    background: #fff;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 30px;
+}
+
+.item-entry {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* --- NEW ADMIN BUTTON --- */
+.admin-trigger {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background: var(--green-deep);
+    border-radius: 50%;
+    opacity: 0.05; /* Almost invisible */
+    cursor: pointer;
+    z-index: 9999;
+    transition: opacity 0.3s, transform 0.3s;
+    border: 2px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.admin-trigger::after {
+    content: "⚙";
+    color: white;
+    font-size: 20px;
+}
+
+.admin-trigger:hover {
+    opacity: 1; /* Visible on hover */
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}

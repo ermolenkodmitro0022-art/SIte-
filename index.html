@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Шахісті - Главная</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+    <h1 id="site-title">Шахісті</h1>
+    <p id="site-subtitle">Клуб интеллектуальной элиты</p>
+</header>
+
+<nav>
+    <a href="index.html">Главная</a>
+    <a href="news.html">Новости</a>
+    <a href="tournaments.html">Турниры</a>
+    <a href="rules.html">Правила</a>
+</nav>
+
+<div class="container">
+    <div class="card" id="welcome-section">
+        <!-- Default content if nothing is saved -->
+        <h2>Добро пожаловать</h2>
+        <p>Мы создали пространство, где время останавливается, а каждый ход имеет значение. Клуб "Шахісті" — это не просто место для игры, это сообщество людей, ценящих глубину мысли и красоту стратегии.</p>
+        <p>Здесь вы найдете достойных соперников и атмосферу, способствующую концентрации и развитию.</p>
+    </div>
+
+    <div class="card" id="philosophy-section">
+        <!-- Default content if nothing is saved -->
+        <h2>Философия Клуба</h2>
+        <p>Шахматы — это искусство анализа. Мы верим, что совершенствуя свою игру, мы совершенствуем себя. Присоединяйтесь к нам на пути к мастерству.</p>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2026 Шахматный клуб "Шахісті". Все права защищены.</p>
+</footer>
+
+<!-- Secret Admin Button -->
+<a href="admin.html" class="admin-trigger" title="Admin Panel"></a>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Load Main Page Content
+        const mainContent = JSON.parse(localStorage.getItem('chess_main_page'));
+
+        if (mainContent) {
+            if (mainContent.siteTitle) document.getElementById('site-title').innerText = mainContent.siteTitle;
+            if (mainContent.siteSubtitle) document.getElementById('site-subtitle').innerText = mainContent.siteSubtitle;
+
+            if (mainContent.welcomeHtml) {
+                document.getElementById('welcome-section').innerHTML = mainContent.welcomeHtml;
+            }
+            if (mainContent.philosophyHtml) {
+                document.getElementById('philosophy-section').innerHTML = mainContent.philosophyHtml;
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

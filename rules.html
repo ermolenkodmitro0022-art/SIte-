@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Шахісті - Правила</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+    <h1>Правила</h1>
+    <p>Кодекс чести</p>
+</header>
+
+<nav>
+    <a href="index.html">Главная</a>
+    <a href="news.html">Новости</a>
+    <a href="tournaments.html">Турниры</a>
+    <a href="rules.html">Правила</a>
+</nav>
+
+<div class="container">
+    <div class="card" id="rules-content">
+        <h2>Общие положения</h2>
+        <p>1. Уважение к сопернику обязательно. Рукопожатие до и после партии.</p>
+        <p>2. Соблюдение тишины во время турнирных партий.</p>
+        <p>3. "Тронул - ходи". Если фигура отпущена, ход сделан.</p>
+        <p>4. Запрещено использование электронных устройств во время игры.</p>
+        <p>5. Судья всегда прав.</p>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2026 Шахматный клуб "Шахісті".</p>
+</footer>
+
+<!-- Secret Admin Button -->
+<a href="admin.html" class="admin-trigger" title="Admin Panel"></a>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const rulesContent = document.getElementById('rules-content');
+        const storedRules = localStorage.getItem('chess_rules');
+
+        if (storedRules) {
+            rulesContent.innerHTML = storedRules;
+        }
+    });
+</script>
+
+</body>
+</html>
